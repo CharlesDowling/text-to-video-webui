@@ -1,9 +1,12 @@
 # text-to-video-webui
-Text-to-video-webui, inspired by @Oogabooga and @AUTOMATIC1111. Currently usable in it's current form without many customizations. Install requirements.txt and run (Also hope that the requirements.txt is all you need, I forgot to keep track so I'll be doing that this week).
+Text-to-video-webui, inspired by @Oogabooga and @AUTOMATIC1111. Currently usable in it's current form without many customizations. Install requirements.txt and run. Supports windows setup.
 
 # Roadmap
 - [ ]  Add settings tab
 - [ ]  Add optional save directory
+- [ ]  Windows Run Bat & Ps1
+- [ ]  Windows setup ps1
+- [ ]  Linux Run & Setup .sh
 - [X]  Finish requirements.txt
 - [ ]  Add option to load more models
 
