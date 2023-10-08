@@ -2,8 +2,8 @@
 Text-to-video-webui, inspired by @Oogabooga and @AUTOMATIC1111. Currently usable in it's current form without many customizations. Install requirements.txt and run. Supports windows setup.
 
 # Roadmap
-- [ ]  Add settings tab
-- [ ]  Add optional save directory
+- [X]  Add settings tab
+- [X]  Add optional save directory
 - [ ]  Windows Run Bat & Ps1
 - [ ]  Windows setup ps1
 - [ ]  Linux Run & Setup .sh
