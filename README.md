@@ -7,7 +7,8 @@ Text-to-video-webui, inspired by @Oogabooga and @AUTOMATIC1111. Currently usable
 - [X]  Finish requirements.txt - 10/08/2023
 - [X]  Fix "Load Model" button - 10/08/2023
 - [X]  Add option to load more models - 10/08/2023
-- [ ]  Windows Run Bat & Ps1
+- [X]  Windows Start bat - 10/08/2023
+- [ ]  Windows ~~Run Bat &~~ start Ps1
 - [ ]  Windows setup ps1
 - [ ]  Linux Run & Setup .sh
 - [ ]  Add CPU only support
