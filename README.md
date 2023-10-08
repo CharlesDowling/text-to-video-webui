@@ -21,7 +21,10 @@ One click install supports only windows setup.
   After setup.bat finishes click on start.bat
 
 ## Linux
-  No clue, TODO 
+  No clue, TODO
+
+## Cross-platform
+
 
 # Roadmap
 - [X]  Add settings tab - 10/08/2023
