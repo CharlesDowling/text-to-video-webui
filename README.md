@@ -4,7 +4,7 @@ Text-to-video-webui, inspired by @Oogabooga and @AUTOMATIC1111. ~~Currently usab
 # Roadmap
 - [ ]  Add settings tab
 - [ ]  Add optional save directory
-- [ ]  Finish requirements.txt
+- [X]  Finish requirements.txt
 - [ ]  Add option to load more models
 
 
