@@ -4,7 +4,7 @@ Text-to-video-webui, inspired by @Oogabooga and @AUTOMATIC1111. Currently usable
 # Roadmap
 - [X]  Add settings tab - 10/08/2023
 - [X]  Add optional save directory - 10/08/2023
-- [ ]  Finish requirements.txt -10/08/2023
+- [X]  Finish requirements.txt -10/08/2023
 - [ ]  Windows Run Bat & Ps1
 - [ ]  Windows setup ps1
 - [ ]  Linux Run & Setup .sh
