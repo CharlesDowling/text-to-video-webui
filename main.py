@@ -20,6 +20,8 @@ from diffusers import DiffusionPipeline, DPMSolverMultistepScheduler
 # Settings imports
 import json
 
+import cv2
+
 # Dummy video path for initializing the placeholder video player
 Video_Path = None
 #try:
@@ -65,8 +67,7 @@ pipe.progress_bar
 
 # This function was taken from Diffusers.utils and rewriteen. "It just works" - Todd Howard
 def export_to_video(video_frames: List[np.ndarray], output_video_path: str = None) -> str:
-    import cv2
-
+    
     fourcc = cv2.VideoWriter_fourcc(*"x264")
     h, w, c = video_frames[0].shape
     video_writer = cv2.VideoWriter(output_video_path, fourcc, fps=SliderFrameRate.value, frameSize=(w, h))
@@ -146,16 +147,16 @@ with gr.Blocks() as WebUI:
 
         with gr.Row():
             # Made a slider for amount of frames. Maximum is an hour because if you really need more...WHY?
-            SliderSteps = gr.Slider(0, 28801, slidervalue, label="Frames", step=8, info="Video length in seconds: 1.0", interactive=True)
+            SliderSteps = gr.Slider(1, 28801, slidervalue, label="Frames", step=8, info="Video length in seconds: 1.0", interactive=True)
 
             def Display_Info(SliderSteps):
                 Text_to_Display = ("Video length in seconds: " + str(SliderSteps/SliderFrameRate.value))
-                SliderSteps = gr.Slider(0, 28801, SliderSteps, label="Frames", step=SliderFrameRate.value, info=Text_to_Display, interactive=True)
+                SliderSteps = gr.Slider(1, 28801, SliderSteps, label="Frames", step=SliderFrameRate.value, info=Text_to_Display, interactive=True)
                 return SliderSteps
             
             def FrameChange(SliderSteps, SliderFrameRate):
                 Text_to_Display = ("Video length in seconds: " + str(SliderSteps/SliderFrameRate))
-                SliderSteps = gr.Slider(0, 28801, SliderSteps, label="Frames", step=SliderFrameRate, info=Text_to_Display, interactive=True)
+                SliderSteps = gr.Slider(1, 28801, SliderSteps, label="Frames", step=SliderFrameRate, info=Text_to_Display, interactive=True)
                 return SliderSteps
             
             #SliderSteps.info = Text_to_Display
@@ -170,14 +171,19 @@ with gr.Blocks() as WebUI:
         GenerateButton.click(fn=generateVideo, inputs=[PromptField, NegPromptField, SliderSteps, SliderFrameRate], outputs=VideoPlayer, api_name="generate_video")
 
     with gr.Tab("Settings") as settings:
-        def applysettings(SaveDir):
+        def applysettings(SaveDir, DefModelDrop):
+            DefModel = str(ModelChoice[DefModelDrop]).strip("{}'")
             SaveSettings = {
                 "OutputDirectory" : SaveDir,
+                "DefaultModel" : DefModel
                 }
-            json.dumps()
+            with open(r"settings.json", "w") as SettingsFile:
+                json.dump(SaveSettings, SettingsFile)
+            
         
         OutputDirectory = gr.Textbox(label="Output Directory", value=saveDirectory, interactive=True)
+        DefaultModelSelect = gr.Dropdown(ModelChoice, label="Default Model", value=list(ModelChoice.keys())[list(ModelChoice.values()).index({defaultModel})], interactive=True)
         ApplySettings = gr.Button("Apply Settings")
-        ApplySettings.click(applysettings, inputs=[OutputDirectory])
+        ApplySettings.click(applysettings, inputs=[OutputDirectory, DefaultModelSelect])
 
 WebUI.launch(debug=True)

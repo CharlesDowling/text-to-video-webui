@@ -1,4 +1,1 @@
-{
-    "OutputDirectory" : "output/",
-    "DefaultModel" : "damo-vilab/text-to-video-ms-1.7b"
-}
+{"OutputDirectory": "output/", "DefaultModel": "damo-vilab/text-to-video-ms-1.7b"}
