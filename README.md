@@ -1,5 +1,27 @@
 # text-to-video-webui
-Text-to-video-webui, inspired by @Oogabooga and @AUTOMATIC1111. Currently usable in it's current form without many customizations. Install requirements.txt and run. Supports windows setup.
+Text-to-video-webui, inspired by @Oogabooga and @AUTOMATIC1111. Currently usable in it's current form without many customizations. 
+
+# Installation
+One click install supports only windows setup.
+## Windows
+  > Click on the file setup.bat
+   
+
+## Linux
+  > In the source directory of the text-to-video-webui
+  > Run python -m venv ./
+
+  > Then run
+  > pip install -r ./requirements.txt
+ 
+
+# Usage
+
+## Windows
+  > After setup.bat finishes click on start.bat
+
+## Linux
+  > No clue, TODO 
 
 # Roadmap
 - [X]  Add settings tab - 10/08/2023
