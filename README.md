@@ -3,9 +3,13 @@ Text-to-video-webui, inspired by @Oogabooga and @AUTOMATIC1111. Currently usable
 
 # Installation
 One click install supports only windows setup.
+
+### Requires FFMPEG
+  > Can be found at https://ffmpeg.org/download.html
+  > I used the gyan.dev version. Extract ffmpeg.exe, ffprobe.exe and ffplay.exe to the root directory of text-to-video-webui
+
 ## Windows
-  Click on the file setup.bat
-   
+  Click on the file setup.bat   
 
 ## Linux
   In the source directory of the text-to-video-webui
