@@ -6,6 +6,7 @@ One click install supports only windows setup.
 
 ### Requires FFMPEG
   > Can be found at https://ffmpeg.org/download.html
+
   > I used the gyan.dev version. Extract ffmpeg.exe, ffprobe.exe and ffplay.exe to the root directory of text-to-video-webui
 
 ## Windows
