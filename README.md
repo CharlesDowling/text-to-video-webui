@@ -1,5 +1,5 @@
 # text-to-video-webui
-Text-to-video-webui, inspired by @Oogabooga and @AUTOMATIC1111. ~~Currently usable~~(Give it an hour or two and it will work, working on it right now) in it's current form without much customizations. Install requirements.txt and run (Also hope that the requirements.txt is all you need, I forgot to keep track so I'll be doing that this week).
+Text-to-video-webui, inspired by @Oogabooga and @AUTOMATIC1111. Currently usable in it's current form without many customizations. Install requirements.txt and run (Also hope that the requirements.txt is all you need, I forgot to keep track so I'll be doing that this week).
 
 # Roadmap
 - [ ]  Add settings tab
