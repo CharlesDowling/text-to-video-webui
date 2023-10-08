@@ -10,6 +10,7 @@ Text-to-video-webui, inspired by @Oogabooga and @AUTOMATIC1111. Currently usable
 - [ ]  Linux Run & Setup .sh
 - [ ]  Add option to load more models
 - [ ]  Fix "Load Model" button
+- [ ]  Add CPU only support
 
 
 # Acknowledgements
