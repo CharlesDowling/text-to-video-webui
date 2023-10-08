@@ -24,7 +24,7 @@ One click install supports only windows setup.
   No clue, TODO
 
 ## Cross-platform
-
+![Picture of UI Interface](https://github.com/CharlesDowling/text-to-video-webui/assets/121833213/ff87e372-191d-478a-bc2b-a5378f7a97e4)
 
 # Roadmap
 - [X]  Add settings tab - 10/08/2023
