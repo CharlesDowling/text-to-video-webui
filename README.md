@@ -59,9 +59,9 @@ At the bottom of the main program area are the Frame & Framerate Sliders and a G
 - [X]  Add option to load more models - 10/08/2023
 - [X]  Windows Start bat - 10/08/2023
 - [ ]  Windows ~~Run Bat &~~ start Ps1
-- [ ]  Add height slider
-- [ ]  Add width slider
-- [ ]  Add inference slider
+- [?]  Add height slider
+- [?]  Add width slider
+- [?]  Add inference slider
 - [ ]  Windows setup ps1
 - [ ]  Linux Run & Setup .sh
 - [ ]  Add CPU only support
