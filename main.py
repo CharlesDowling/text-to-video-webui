@@ -62,10 +62,13 @@ pipe = DiffusionPipeline.from_pretrained(defaultModel, torch_dtype=torch.float16
 
 # Sets up scheduler
 pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
-# Removes cpu reliance
+# Stores weights in CPU until needed
 pipe.enable_model_cpu_offload()
+
 # Displays progress bar in console
 pipe.progress_bar
+
+pipe.enable_xformers_memory_efficient_attention()
 
 # This function was taken from Diffusers.utils and rewriteen. "It just works" - Todd Howard
 def export_to_video(video_frames: List[np.ndarray], output_video_path: str = None) -> str:
@@ -107,7 +110,7 @@ with gr.Blocks() as WebUI:
         # Allows for the choice of different models
         print(ModelChoice.values())
         print(list(ModelChoice.keys())[list(ModelChoice.values()).index({defaultModel})])
-        ModelSelect = gr.Dropdown(ModelChoice, label="Selected Model", value=list(ModelChoice.keys())[list(ModelChoice.values()).index({defaultModel})], interactive=True)
+        ModelSelect = gr.Dropdown(ModelChoice, label="Selected Model", value=list(ModelChoice.keys())[list(ModelChoice.values()).index({defaultModel})], interactive=True, allow_custom_value=True)
         ModelLoad = gr.Button("Load Model")
         ModelLoad.click(fn=LoadModel, inputs=ModelSelect, outputs=ModelSelect)
 
@@ -115,12 +118,32 @@ with gr.Blocks() as WebUI:
 
 
         # Generates the dang video
-        def generateVideo(Prompt, NegPrompt, frames, framerate):      
-            if NegPrompt == "":
-                NegPrompt=None
+        def generateVideo(
+                Prompt, 
+                NegPrompt, 
+                frames, 
+                framerate, 
+                width, 
+                height,
+                inference
+                ):   
+
+            PromptList = list(Prompt.split(","))
+            NegPromptList = list(NegPrompt.split(","))
+
+            if len(NegPromptList) != len(PromptList):
+                if len(NegPromptList) > len(PromptList):
+                    differencelength = len(NegPromptList) - len(PromptList)
+                    for diff in (1,differencelength):
+                        PromptList.append(" ")
+                else:
+                    differencelength = len(PromptList) - len(NegPromptList)
+                    for diff in (1,differencelength):
+                        NegPromptList.append(" ")
+
 
             # Generates the frames
-            video_frames = pipe(prompt=Prompt, negative_prompt=NegPrompt, height=512, width=512, num_inference_steps=8, num_frames=frames).frames            
+            video_frames = pipe(prompt=PromptList, negative_prompt=NegPromptList, height=height, width=width, num_inference_steps=inference, num_frames=frames).frames            
             print("Finished Generating")
 
             #Removes witespace for file name
@@ -138,9 +161,6 @@ with gr.Blocks() as WebUI:
             VideoPlayer = gr.Video(Video_Path)
             return VideoPlayer
         
-        # Changes Label Text
-
-
         with gr.Row():
 
 
@@ -150,6 +170,9 @@ with gr.Blocks() as WebUI:
                 # Prompt input text
                 PromptField = gr.TextArea(label="Prompt", placeholder="Type in prompt here")
                 NegPromptField = gr.TextArea(label="Negative Prompt", placeholder="Type in negative prompt here")
+
+                with gr.Row():
+                    SliderInference = gr.Slider(1, 50, 7, label="Inference Strength", step=1, info="Amount of inference steps", interactive=True)
 
             # Made a dummy video player, will be replaced by player generated in generateVideo()
             VideoPlayer = gr.Video(Video_Path, interactive=False, height=400)
@@ -175,11 +198,28 @@ with gr.Blocks() as WebUI:
             SliderFrameRate = gr.Slider(1, 60, slidervalue, label="Framerate", step=1, interactive=True)
             SliderFrameRate.change(FrameChange,inputs=[SliderFrames,SliderFrameRate], outputs=SliderFrames)
 
+        with gr.Row():
+
+
+            with gr.Column():
+                
+                
+                SliderWidth = gr.Slider(8, 1024, 512, label="Width", step=8, info="Adjust the output width", interactive=True)
+                SliderHeight = gr.Slider(8, 1024, 512, label="Height", step=8, info="Adjust the output Height", interactive=True)
+
 
 
         # Button to generate and click event handler
         GenerateButton = gr.Button("Generate Video")
-        GenerateButton.click(fn=generateVideo, inputs=[PromptField, NegPromptField, SliderFrames, SliderFrameRate], outputs=VideoPlayer, api_name="generate_video")
+        GenerateButton.click(fn=generateVideo, inputs=[
+            PromptField, 
+            NegPromptField, 
+            SliderFrames, 
+            SliderFrameRate, 
+            SliderWidth, 
+            SliderHeight, 
+            SliderInference
+            ], outputs=VideoPlayer, api_name="generate_video")
 
     with gr.Tab("Settings") as settings:
 
