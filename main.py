@@ -22,6 +22,8 @@ import json
 
 import cv2
 
+from diffusers import *
+
 # Dummy video path for initializing the placeholder video player
 Video_Path = None
 #try:
@@ -78,6 +80,7 @@ def export_to_video(video_frames: List[np.ndarray], output_video_path: str = Non
 
 with gr.Blocks() as WebUI:
 
+
     # Loads model
     def LoadModel(ModelDrop):
         #Loads the model
@@ -99,6 +102,8 @@ with gr.Blocks() as WebUI:
         return ModelDrop    
 
     with gr.Row():
+
+
         # Allows for the choice of different models
         print(ModelChoice.values())
         print(list(ModelChoice.keys())[list(ModelChoice.values()).index({defaultModel})])
@@ -107,13 +112,15 @@ with gr.Blocks() as WebUI:
         ModelLoad.click(fn=LoadModel, inputs=ModelSelect, outputs=ModelSelect)
 
     with gr.Tab("Generation") as server:
+
+
         # Generates the dang video
-        def generateVideo(Prompt, NegPrompt, steps, framerate):      
+        def generateVideo(Prompt, NegPrompt, frames, framerate):      
             if NegPrompt == "":
                 NegPrompt=None
-#            try:
-            # Generates the frames  
-            video_frames = pipe(prompt=Prompt, negative_prompt=NegPrompt, num_inference_steps=steps).frames
+
+            # Generates the frames
+            video_frames = pipe(prompt=Prompt, negative_prompt=NegPrompt, height=512, width=512, num_inference_steps=8, num_frames=frames).frames            
             print("Finished Generating")
 
             #Removes witespace for file name
@@ -130,47 +137,53 @@ with gr.Blocks() as WebUI:
             # Reinitialized video player with video file
             VideoPlayer = gr.Video(Video_Path)
             return VideoPlayer
-#            except:
-#               print("No model loaded")
         
         # Changes Label Text
 
 
         with gr.Row():
+
+
             with gr.Column():
+
+
                 # Prompt input text
                 PromptField = gr.TextArea(label="Prompt", placeholder="Type in prompt here")
-                NegPromptField = gr.TextArea(label="Negative Prompt", placeholder="Type in negative prompt")
+                NegPromptField = gr.TextArea(label="Negative Prompt", placeholder="Type in negative prompt here")
 
             # Made a dummy video player, will be replaced by player generated in generateVideo()
             VideoPlayer = gr.Video(Video_Path, interactive=False, height=400)
 
         with gr.Row():
-            # Made a slider for amount of frames. Maximum is an hour because if you really need more...WHY?
-            SliderSteps = gr.Slider(1, 28801, slidervalue, label="Frames", step=8, info="Video length in seconds: 1.0", interactive=True)
 
-            def Display_Info(SliderSteps):
-                Text_to_Display = ("Video length in seconds: " + str(SliderSteps/SliderFrameRate.value))
-                SliderSteps = gr.Slider(1, 28801, SliderSteps, label="Frames", step=SliderFrameRate.value, info=Text_to_Display, interactive=True)
-                return SliderSteps
+
+            # Made a slider for amount of frames. Maximum is an hour because if you really need more...WHY?
+            SliderFrames = gr.Slider(1, 28801, slidervalue, label="Frames", step=8, info="Video length in seconds: 1.0", interactive=True)
+
+            def Display_Info(SliderFrames):
+                Text_to_Display = ("Video length in seconds: " + str(SliderFrames/SliderFrameRate.value))
+                SliderFrames = gr.Slider(1, 28801, SliderFrames, label="Frames", step=SliderFrameRate.value, info=Text_to_Display, interactive=True)
+                return SliderFrames
             
-            def FrameChange(SliderSteps, SliderFrameRate):
-                Text_to_Display = ("Video length in seconds: " + str(SliderSteps/SliderFrameRate))
-                SliderSteps = gr.Slider(1, 28801, SliderSteps, label="Frames", step=SliderFrameRate, info=Text_to_Display, interactive=True)
-                return SliderSteps
+            def FrameChange(SliderFrames, SliderFrameRate):
+                Text_to_Display = ("Video length in seconds: " + str(SliderFrames/SliderFrameRate))
+                SliderFrames = gr.Slider(1, 28801, SliderFrames, label="Frames", step=SliderFrameRate, info=Text_to_Display, interactive=True)
+                return SliderFrames
             
             #SliderSteps.info = Text_to_Display
-            SliderSteps.change(Display_Info, inputs=SliderSteps, outputs=SliderSteps)
+            SliderFrames.change(Display_Info, inputs=SliderFrames, outputs=SliderFrames)
             SliderFrameRate = gr.Slider(1, 60, slidervalue, label="Framerate", step=1, interactive=True)
-            SliderFrameRate.change(FrameChange,inputs=[SliderSteps,SliderFrameRate], outputs=SliderSteps)
+            SliderFrameRate.change(FrameChange,inputs=[SliderFrames,SliderFrameRate], outputs=SliderFrames)
 
 
 
         # Button to generate and click event handler
         GenerateButton = gr.Button("Generate Video")
-        GenerateButton.click(fn=generateVideo, inputs=[PromptField, NegPromptField, SliderSteps, SliderFrameRate], outputs=VideoPlayer, api_name="generate_video")
+        GenerateButton.click(fn=generateVideo, inputs=[PromptField, NegPromptField, SliderFrames, SliderFrameRate], outputs=VideoPlayer, api_name="generate_video")
 
     with gr.Tab("Settings") as settings:
+
+
         def applysettings(SaveDir, DefModelDrop):
             DefModel = str(ModelChoice[DefModelDrop]).strip("{}'")
             SaveSettings = {
