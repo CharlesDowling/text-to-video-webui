@@ -2,3 +2,4 @@ gradio==3.47.1
 diffusers==0.21.4
 opencv-python
 transformers
+xformers
